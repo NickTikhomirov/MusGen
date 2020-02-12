@@ -18,6 +18,11 @@ type
       function isHovered(xy:point):boolean;
       procedure draw;
   end;
+  
+  ButtonManager = class
+  public
+    ButtonsOnScreen: array of IButton;
+  end;
 
 
 implementation
