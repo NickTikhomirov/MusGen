@@ -3,6 +3,7 @@ unit MyButtons;
 interface
 
 uses graphabc;
+uses DrawRules;
 
 type
   IButton = interface
@@ -13,6 +14,9 @@ type
   RectangleButton = class(IButton)
     public
       corner_leftUp, corner_rightDown : Point;
+      isOn:boolean;
+      colors:DrawData;
+      
       constructor Create(leftup, rightdown: Point);
       constructor Create(leftup: Point; width, height:integer);
       function isHovered(xy:point):boolean;
@@ -22,6 +26,7 @@ type
   ButtonManager = class
   public
     ButtonsOnScreen: array of IButton;
+    procedure draw;
   end;
 
 
@@ -39,7 +44,9 @@ end;
 
 procedure RectangleButton.draw;
 begin
-
+  colors.choose(isOn);
+  rectangle(corner_leftUp.X,corner_leftUp.Y, corner_rightDown.X, corner_rightDown.Y);
+  brush.Color :=clTransparent;  //cuz in the other case it draws text with color
 end;
 
 
@@ -53,6 +60,14 @@ constructor RectangleButton.Create(leftup: Point; width, height:integer);
 begin
   self.corner_leftUp := leftup;
   self.corner_rightDown := new Point(leftup.x + width, leftup.y + height);
+end;
+
+
+
+procedure ButtonManager.draw;
+begin
+  for var i:=0 to self.ButtonsOnScreen.Length-1 do
+    self.ButtonsOnScreen[i].draw;
 end;
 
 
